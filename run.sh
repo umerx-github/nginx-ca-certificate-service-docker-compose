@@ -22,6 +22,7 @@ fi
 
 if [ "$1" = "up" ]; then
     echo "Starting the application"
+    docker network inspect nginx_proxy_network || docker network create nginx_proxy_network
     command="docker compose $docker_compose_args up -d --pull always"
     echo $command
     exec $command

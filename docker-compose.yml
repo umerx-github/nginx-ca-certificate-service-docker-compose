@@ -35,4 +35,4 @@ volumes:
     ca_certificate_service_domain:
 networks:
     nginx_proxy_network:
-        external: false
+        external: true
