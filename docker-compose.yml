@@ -18,7 +18,7 @@ services:
             - nginx_global_certs:/etc/nginx/global_certs:rw
         environment:
             - CSR_REQUEST_ENDPOINT=ca-certificate-service/domain
-    ca_certificate_servicde:
+    ca_certificate_service:
         image: ghcr.io/andrewjdawes/ca-certificate-service:latest
         restart: always
         expose:
