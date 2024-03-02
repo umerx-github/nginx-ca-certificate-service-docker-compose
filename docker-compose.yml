@@ -1,0 +1,38 @@
+version: "3.8"
+services:
+    nginx:
+        image: ghcr.io/andrewjdawes/nginx:latest
+        restart: unless-stopped
+        depends_on:
+            - ca_certificate_service
+        ports:
+            - "80:80"
+            - "443:443"
+        networks:
+            - default
+            - nginx_proxy_network
+        volumes:
+            - ./data/nginx/etc/nginx/sites:/etc/nginx/sites:ro
+            - ./data/nginx/etc/nginx/conf.d:/etc/nginx/conf.d:ro
+            - nginx_site_certs:/etc/nginx/site_certs:rw
+            - nginx_global_certs:/etc/nginx/global_certs:rw
+        environment:
+            - CSR_REQUEST_ENDPOINT=ca-certificate-service/domain
+    ca_certificate_servicde:
+        image: ghcr.io/andrewjdawes/ca-certificate-service:latest
+        restart: always
+        expose:
+            - 80
+        networks:
+            - default
+        volumes:
+            - ca_certificate_service_domain:/app/data/domain
+            - ./data/ca_certificate_service/ca:/app/data/ca:rw
+            - ./data/ca_certificate_service/secrets:/app/data/secrets:ro
+volumes:
+    nginx_site_certs:
+    nginx_global_certs:
+    ca_certificate_service_domain:
+networks:
+    nginx_proxy_network:
+        external: false
